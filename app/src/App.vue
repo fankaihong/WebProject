@@ -55,9 +55,9 @@
 </template>
 
 <script>
-	import Home from "@/components/Home.vue";
-	import UserList from "@/components/UserList.vue";
-	import UserAdd from "@/components/UserAdd.vue";
+	import Home from "@/views/Home.vue";
+	import UserList from "@/views/UserList.vue";
+	import UserAdd from "@/views/UserAdd.vue";
 
 	const menuList = [{
 		title: '用户查询',
