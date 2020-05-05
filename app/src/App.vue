@@ -13,18 +13,7 @@
 							<!-- menu -->
 							<el-menu style="border-bottom: #545c64;" :default-active="activeIndex2" class="el-menu-demo" mode="horizontal"
 							 @select="handleSelect" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
-								<el-submenu index="1">
-									<template slot="title">首页</template>
-									<el-menu-item index="1-1">动态温湿度</el-menu-item>
-									<el-menu-item index="1-2">选项2</el-menu-item>
-									<el-menu-item index="1-3">选项3</el-menu-item>
-									<el-submenu index="1-4">
-										<template slot="title">首页</template>
-										<el-menu-item index="a">动态温湿度</el-menu-item>
-										<el-menu-item index="v">选项2</el-menu-item>
-										<el-menu-item index="c">选项3</el-menu-item>
-									</el-submenu>
-								</el-submenu>
+								<el-submenu index="Home">首页</el-submenu>
 								<el-submenu index="2">
 									<template slot="title">报表管理</template>
 									<el-menu-item index="2-1">温湿度监控报表</el-menu-item>
@@ -53,7 +42,8 @@
 				</el-row>
 			</el-header>
 			<el-main>
-				<el-tabs v-model="currentTab" @tab-click="changeView" type="card" closable @tab-remove="removeTab">
+				<Home v-if="isHome"></Home>
+				<el-tabs v-if="!isHome" v-model="currentTab" @tab-click="changeView" type="card" closable @tab-remove="removeTab">
 					<el-tab-pane v-for="(item, index) in editableTabs" :key="item.name" v-if="item.isExist" :label="item.title" :name="item.name" />
 					<keep-alive>
 						<component v-bind:is="currentTabComponent"></component>
@@ -65,9 +55,10 @@
 </template>
 
 <script>
+	import Home from "@/components/Home.vue";
 	import UserList from "@/components/UserList.vue";
 	import UserAdd from "@/components/UserAdd.vue";
-	
+
 	const menuList = [{
 		title: '用户查询',
 		name: 'UserList',
@@ -77,15 +68,17 @@
 		name: 'UserAdd',
 		isExist: false
 	}];
-	
+
 	export default {
 		name: "App",
 		components: {
 			UserList,
-			UserAdd
+			UserAdd,
+			Home
 		},
 		data() {
 			return {
+				isHome:true,
 				currentTab: "UserList",
 				editableTabsValue: 'UserList',
 				editableTabs: menuList
@@ -96,14 +89,13 @@
 				return this.currentTab;
 			}
 		},
-		watch: {
-			$route(menu) {
-				console.dir(menu);
-				this.addTab(menu.name);
-			}
-		},
 		methods: {
 			handleSelect(key, keyPath) {
+				if(key === "Home"){
+					this.isHome = true;
+				}else{
+					this.isHome = false;
+				}
 				this.addTab(key);
 			},
 			changeView(tab) {
